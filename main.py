@@ -1,6 +1,13 @@
+import math
+import os
+import sys
+
 import pygame
 from pygame.locals import *
 import numpy as np
+
+RENDER_MODE = True
+RENDER_TIME = 200
 
 COL_BACKGROUND = (0, 0, 0)
 COL_FOREGROUND = (255, 255, 255)
@@ -24,12 +31,18 @@ class Demo:
                                                self.size_mult * self.height))
 
         self._clock = pygame.time.Clock()
-        self._fps = 5.0
+        self._fps = 60.0
 
-        self.time = 0
+        self.time = 920 + 120 * self._fps
+        self.tickno = 0
+
+        if RENDER_MODE:
+            os.makedirs("out", exist_ok=True)
 
     def run(self):
         dt = 1 / self._fps * 1000
+        render_target = math.ceil(self._fps * RENDER_TIME)
+
         while True:
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -38,7 +51,17 @@ class Demo:
             self.draw()
             self.update(dt)
 
-            dt = self._clock.tick(self._fps)
+            if not RENDER_MODE:
+                dt = self._clock.tick(self._fps)
+            else:
+                # save image
+                pygame.image.save(self.screen, os.path.join("out", "{:06d}.png".format(self.tickno)))
+                print("rendered {:06d}/{:06d}".format(self.tickno, render_target))
+                if self.tickno >= render_target:
+                    print("rendering done")
+                    sys.exit()
+
+            self.tickno += 1
 
     def update(self, dt):
         self.time += dt
@@ -49,9 +72,9 @@ class Demo:
     def plot(self, x, y, col=COL_FOREGROUND, size=0.01):
         pygame.draw.rect(self.screen, col, (self.conv(x - size/2, y + size/2), (size*self.size_mult, size*self.size_mult)))
 
-    def _rot_mat(self, theta):
+    def _rot_mat(self, theta, x,y):
         return np.array([
-            [np.cos(theta), -np.sin(theta)],
+            [np.cos(theta + x), -np.sin(theta)],
             [np.sin(theta), np.cos(theta)]
         ])
 
@@ -60,7 +83,7 @@ class Demo:
         #     [0, 1],
         #     [1, 0]
         # ])
-        mat = self._rot_mat(self.time)
+        mat = self._rot_mat(self.time*0.0005, x, y)
         res = np.matmul(mat, np.array([
             [x],
             [y],
