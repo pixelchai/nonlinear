@@ -3,3 +3,5 @@ __pycache__/
 outs/output.mp4
 out/
 outs/
+nonlinear/ffmpeg.txt
+nonlinear/processing-movie.mp4
