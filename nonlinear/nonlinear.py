@@ -37,7 +37,7 @@ class Demo:
         self.tickno = 0
 
         if RENDER_MODE:
-            os.makedirs("out", exist_ok=True)
+            os.makedirs("../out", exist_ok=True)
 
     def run(self):
         dt = 1 / self._fps * 1000
@@ -55,7 +55,7 @@ class Demo:
                 dt = self._clock.tick(self._fps)
             else:
                 # save image
-                pygame.image.save(self.screen, os.path.join("out", "{:06d}.png".format(self.tickno)))
+                pygame.image.save(self.screen, os.path.join("../out", "{:06d}.png".format(self.tickno)))
                 print("rendered {:06d}/{:06d}".format(self.tickno, render_target))
                 if self.tickno >= render_target:
                     print("rendering done")
