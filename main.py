@@ -45,7 +45,7 @@ class Demo:
         return (self.off_x + x)*self.size_mult, (self.height - (self.off_y + y)) * self.size_mult
 
     def plot(self, x, y, col=COL_FOREGROUND, size=0.01):
-        pygame.draw.rect(self.screen, col, (self.conv(x - size/2, y - size/2), (size*self.size_mult, size*self.size_mult)))
+        pygame.draw.rect(self.screen, col, (self.conv(x - size/2, y + size/2), (size*self.size_mult, size*self.size_mult)))
 
     def _draw_axes(self):
         # parametric plot of both x and y axes
@@ -62,7 +62,7 @@ class Demo:
         #     self.plot(0, t, size=0.5)
         #     self.plot(t, 0, size=0.5)
         #     t += 1
-        self.plot(0, 0, size=0.5)
+        self.plot(0.0, 0.0, size=1)
 
     def draw(self):
         self.screen.fill(COL_BACKGROUND)
