@@ -21,9 +21,9 @@ class Demo:
         self.off_x = self.width//2
         self.off_y = self.off_x
 
-        self.lower = self.width * -2
-        self.upper = self.width * 2
-        self.delta = 0.03
+        self.lower = self.width * -0.5
+        self.upper = self.width * 0.5
+        self.delta = 0.01
 
         self.size_mult = 60
 
@@ -37,7 +37,7 @@ class Demo:
         self.tickno = 0
 
         if RENDER_MODE:
-            os.makedirs("../out", exist_ok=True)
+            os.makedirs("out", exist_ok=True)
 
     def run(self):
         dt = 1 / self._fps * 1000
@@ -55,7 +55,7 @@ class Demo:
                 dt = self._clock.tick(self._fps)
             else:
                 # save image
-                pygame.image.save(self.screen, os.path.join("../out", "{:06d}.png".format(self.tickno)))
+                pygame.image.save(self.screen, os.path.join("out", "{:06d}.png".format(self.tickno)))
                 print("rendered {:06d}/{:06d}".format(self.tickno, render_target))
                 if self.tickno >= render_target:
                     print("rendering done")
@@ -75,8 +75,8 @@ class Demo:
     def f(self, x, y):
         theta = self.time * 0.0005
         mat = np.array([
-            [np.cos(theta + x), -np.sin(theta)],
-            [np.sin(theta), np.cos(theta)]
+            [np.cos(theta) + np.cos(x), -np.sin(theta) + np.cos(y)],
+            [np.sin(theta) + np.cos(x), np.cos(theta) + np.cos(y)]
         ])
         res = np.matmul(mat, np.array([
             [x],

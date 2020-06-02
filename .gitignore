@@ -1,4 +1,5 @@
 .idea/
 __pycache__/
-output.mp4
+outs/output.mp4
 out/
+outs/

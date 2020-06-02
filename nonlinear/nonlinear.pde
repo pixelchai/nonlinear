@@ -2,16 +2,14 @@ int SIZE_MULT = 80;
 int WIDTH = 10;
 int HEIGHT = WIDTH;
 
-int LOWER = WIDTH * -1;
-int UPPER = WIDTH * 1;
+float LOWER = WIDTH * -0.5;
+float UPPER = WIDTH * 0.5;
 float DELTA = 0.05;
-
-color COL_BACKGROUND = color(0, 0, 0);
-color COL_FOREGROUND = color(255, 255, 255);
 
 void setup(){
   frameRate(20);
   surface.setSize(WIDTH * SIZE_MULT, HEIGHT * SIZE_MULT);
+  noFill();
 }
 
 PVector matmul(float a, float b, float c, float d, float x, float y){
@@ -26,38 +24,52 @@ PVector f(float x, float y){
   a = cos(theta) + cos(x); b = -sin(theta) + cos(y);
   c = sin(theta) + cos(x); d = cos(theta) + cos(y);
   
-  return matmul(a,b,c,d,x,y);
+  return conv(matmul(a,b,c,d,x,y));
 }
 
-void plot(float x, float y, color col, float size){
-  fill(col);
-  rect((x - size/2)*SIZE_MULT, (y + size/2)*SIZE_MULT, size*SIZE_MULT, size*SIZE_MULT);
-}
-
-void plot(float x, float y, color col){
-  plot(x, y, col, 0.05);
-}
-
-void plot(PVector point, color col){
-  plot(point.x, point.y, col);
+PVector conv(PVector point){
+  return new PVector(point.x * SIZE_MULT, point.y * SIZE_MULT);
 }
 
 void draw_grid(){
   // draw grid
+  stroke(100);
+  noFill();
   for(float t = LOWER; t < UPPER; t += 1){
     if (t == 0) continue;
     
+    beginShape();
     for(float s = LOWER; s < UPPER; s += DELTA){
-      plot(f(s, t), 100);
-      plot(f(t, s), 100);
+      PVector point = f(s, t);
+      vertex(point.x, point.y);
     }
+    endShape();
+    
+    beginShape();
+    for(float s = LOWER; s < UPPER; s += DELTA){
+      PVector point = f(t, s);
+      vertex(point.x, point.y);
+    }
+    endShape();
   }
   
-  // draw axes
+  stroke(255);
+  
+  // draw y axis
+  beginShape();
   for(float t = LOWER; t < UPPER; t += DELTA){
-    plot(f(0, t), 255);
-    plot(f(t, 0), 255);
+    PVector point = f(0, t);
+    vertex(point.x, point.y);
   }
+  endShape();
+  
+  // draw x axis
+  beginShape();
+  for(float t = LOWER; t < UPPER; t += DELTA){
+    PVector point = f(t, 0);
+    vertex(point.x, point.y);
+  }
+  endShape();
 }
 
 
@@ -67,5 +79,4 @@ void draw(){
   background(0);
   
   draw_grid();
-  //plot(0, 0, 255, 1);
 }
