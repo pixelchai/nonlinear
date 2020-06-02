@@ -18,17 +18,15 @@ PVector matmul(float a, float b, float c, float d, float x, float y){
   return new PVector(a*x + b*y, c*x + d*y);
 }
 
-PVector rotmatmul(float theta, float x, float y){
+PVector f(float x, float y){
+  float theta = millis()*0.0005;
+  
   // define matrix
   float a,b,c,d;
   a = cos(theta) + cos(x); b = -sin(theta) + cos(y);
   c = sin(theta) + cos(x); d = cos(theta) + cos(y);
   
   return matmul(a,b,c,d,x,y);
-}
-
-PVector f(float x, float y){
-  return rotmatmul(millis()*0.0005, x, y);
 }
 
 void plot(float x, float y, color col, float size){

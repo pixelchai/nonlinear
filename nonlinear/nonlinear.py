@@ -72,18 +72,12 @@ class Demo:
     def plot(self, x, y, col=COL_FOREGROUND, size=0.01):
         pygame.draw.rect(self.screen, col, (self.conv(x - size/2, y + size/2), (size*self.size_mult, size*self.size_mult)))
 
-    def _rot_mat(self, theta, x,y):
-        return np.array([
+    def f(self, x, y):
+        theta = self.time * 0.0005
+        mat = np.array([
             [np.cos(theta + x), -np.sin(theta)],
             [np.sin(theta), np.cos(theta)]
         ])
-
-    def f(self, x, y):
-        # mat = np.array([
-        #     [0, 1],
-        #     [1, 0]
-        # ])
-        mat = self._rot_mat(self.time*0.0005, x, y)
         res = np.matmul(mat, np.array([
             [x],
             [y],
@@ -110,11 +104,7 @@ class Demo:
 
     def draw(self):
         self.screen.fill(COL_BACKGROUND)
-
-        # axes
         self._draw_axes()
-
-
         pygame.display.flip()
 
 if __name__ == '__main__':
