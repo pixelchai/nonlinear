@@ -1,6 +1,8 @@
 # nonlinear
 Experimenting with non-linear transformations
 
+![](example/example.gif)
+
 ## Theory
 I was curious about what would happen if we transformed the coordinate system with a 2D transformation matrix which had entries that are functions of the points they are transforming (unlike linear algebra). This is the result, and it looks pretty cool.
 
